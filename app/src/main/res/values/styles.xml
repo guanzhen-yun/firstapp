@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Dialog_Fullscreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- dialog 动画-->
+    <style name="DialogAnimations" parent="android:Animation">
+        <item name="android:windowEnterAnimation" >@anim/slide_bottom_in</item>
+        <item name="android:windowExitAnimation" >@anim/slide_bottom_out</item>
+    </style>
 </resources>
