@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.test.firstapp.R;
-import com.test.firstapp.sharedpreference.SharedPreferenceActivity;
+import com.test.firstapp.viewpager.ViewPagerActivity;
 
 /**
  * Author:关震
@@ -23,6 +23,6 @@ public class MainActivity extends Activity {
     }
 
     public void jumpNextPage(View view) {
-        startActivity(new Intent(MainActivity.this, SharedPreferenceActivity.class));
+        startActivity(new Intent(MainActivity.this, ViewPagerActivity.class));
     }
 }

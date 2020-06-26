@@ -28,6 +28,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".event.EventBus2Activity" />
         <activity android:name=".sharedpreference.SharedPreferenceActivity" />
+        <activity android:name=".viewpager.ViewPagerActivity" />
         <!--        <activity android:name=".service.ServiceActivity" />-->
 
         <service android:name=".service.MusicService" />
