@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
-        <activity android:name=".timer.TimerActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,6 +27,7 @@
         <activity android:name=".FourActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".event.EventBus2Activity" />
+        <activity android:name=".sharedpreference.SharedPreferenceActivity" />
         <!--        <activity android:name=".service.ServiceActivity" />-->
 
         <service android:name=".service.MusicService" />

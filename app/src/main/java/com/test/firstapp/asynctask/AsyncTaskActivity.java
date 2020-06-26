@@ -1,14 +1,17 @@
-package com.test.firstapp;
+package com.test.firstapp.asynctask;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+
+import com.test.firstapp.R;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,14 +23,10 @@ import butterknife.OnClick;
  * Description:AsyncTaskActivity 异步任务
  **/
 public class AsyncTaskActivity extends Activity {
-    @BindView(R.id.btn_load)
-    Button mBtnLoad;
     @BindView(R.id.tv_tip)
     TextView mTvTip;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
-    @BindView(R.id.btn_cancel)
-    Button mBtnCancel;
 
     // 线程变量
     private MyTask mTask;
@@ -37,15 +36,19 @@ public class AsyncTaskActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asynctask);
         ButterKnife.bind(this);
-
     }
 
     @OnClick({R.id.btn_load, R.id.btn_cancel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_load:
+                mTask = new MyTask(this);
+                mTask.execute();
                 break;
             case R.id.btn_cancel:
+                if(mTask != null) {
+                    mTask.cancel(true);
+                }
                 break;
         }
     }
@@ -58,13 +61,17 @@ public class AsyncTaskActivity extends Activity {
      * 此处指定为：输入参数 = String类型、执行进度 = Integer类型、执行结果 = String类型
      * c. 根据需求，在AsyncTask子类内实现核心方法
      */
-    private class MyTask extends AsyncTask<String, Integer, String> {
+    private static class MyTask extends AsyncTask<String, Integer, String> {
+        private WeakReference<AsyncTaskActivity> weakReference;
+        public MyTask(AsyncTaskActivity asyncTaskActivity) {
+            weakReference = new WeakReference<>(asyncTaskActivity);
+        }
 
         // 方法1：onPreExecute（）
         // 作用：执行 线程任务前的操作
         @Override
         protected void onPreExecute() {
-            text.setText("加载中");
+            weakReference.get().mTvTip.setText("加载中");
             // 执行前显示提示
         }
 
@@ -74,12 +81,10 @@ public class AsyncTaskActivity extends Activity {
         // 此处通过计算从而模拟“加载进度”的情况
         @Override
         protected String doInBackground(String... params) {
-
             try {
                 int count = 0;
                 int length = 1;
                 while (count < 99) {
-
                     count += length;
                     // 可调用publishProgress（）显示进度, 之后将执行onProgressUpdate（）
                     publishProgress(count);
@@ -97,10 +102,8 @@ public class AsyncTaskActivity extends Activity {
         // 作用：在主线程 显示线程任务执行的进度
         @Override
         protected void onProgressUpdate(Integer... progresses) {
-
-            progressBar.setProgress(progresses[0]);
-            text.setText("loading..." + progresses[0] + "%");
-
+            weakReference.get().mProgressBar.setProgress(progresses[0]);
+            weakReference.get().mTvTip.setText("loading..." + progresses[0] + "%");
         }
 
         // 方法4：onPostExecute（）
@@ -108,17 +111,15 @@ public class AsyncTaskActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             // 执行完毕后，则更新UI
-            text.setText("加载完毕");
+            weakReference.get().mTvTip.setText("加载完毕");
         }
 
         // 方法5：onCancelled()
         // 作用：将异步任务设置为：取消状态
         @Override
         protected void onCancelled() {
-
-            text.setText("已取消");
-            progressBar.setProgress(0);
-
+            weakReference.get().mTvTip.setText("已取消");
+            weakReference.get().mProgressBar.setProgress(0);
         }
     }
 }
